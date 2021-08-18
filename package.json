@@ -11,12 +11,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CST-education/webpack_base_bundle.git"
+    "url": "git+https://github.com/popingalov/wp-test"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "homepage": "https://CST-education.github.io/webpack_bundle#readme",
+  "homepage": "https://popingalov.github.io/wp-test/",
   "devDependencies": {
     "@babel/core": "^7.12.8",
     "@babel/plugin-proposal-class-properties": "^7.12.1",
