@@ -18,7 +18,7 @@
   "author": "Alexander Panov",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/abyss-soft/webpack-template-base.git"
+    "url": "git+https://github.com/popingalov/wp-test.git"
   },
   "license": "MIT",
   "jest": {
