@@ -1,227 +1,114 @@
-# webpack_base_bundle
+# Готовая сборка webpack
 
-1. Создаем репозиторий на GitHub с двумя файлами:   
-.gitignore  
-MIT License
+В ней есть оптимизация и минимизация:
 
-2. Клонируем в консоли Git Bash, открытой в отведенной папке или диске на вашем
-   компьютере, репозиторий проекта на локальный компьютер, командой:   
-```git clone url_repo```
+1. JavaScript (babel, core-js)
+2. SCSS
+3. HTML
+4. Сжатие картинок
+5. Работа со шрифтами
+6. Проверка кода **ESLint**
+7. Поддержка сетки **smart-grid** (это миксины, которые облегчают адаптивную верстку проекта, как в bootstrap: xs,sm,md,lg,xl)
+8. Webpack-dev-server
+9. Поддержка **jest** с покрытием кода
+10. Возможность использования глобальных переменных ENV
+11. **Описание ошибок выводится прямо в браузере**
+12. Включен плагин, позволяющий удалять блоки кода, например при выводе в продакшен
 
-3. Заходим в консоли Git Bash внутрь клонированного репозитория, командой:    
-```cd repo_name```
+----
 
-4. Открываем папку проекта в редакторе кода VSCode, командой:   
-```code .```
+**если нужна сборка с Vue и Vuex то она тут**
+[https://github.com/abyss-soft/webpack-template-base_vue_vuex](https://github.com/abyss-soft/webpack-template-base_vue_vuex) 
 
-5. Открываем TERMINAL в редакторе кода VSCode (внизу окна редактора)
+**если нужна сборка с шаблонизатором Pug, то она тут**
+[https://github.com/abyss-soft/webpack-template-base_Pug](https://github.com/abyss-soft/webpack-template-base_Pug) 
 
-6. Инициализируем (создаем) файл package.json в нашем проекте, командой:   
-   ```npm init -y  ```  
-   в TERMINAL - слева в структуре проекта должен появится файл package.json
 
-7. Устанавливаем пакеты Webpack через TERMINAL, командой:    
-```npm install --save-dev webpack webpack-cli```
 
-должна произойти __загрузка пакетов__ webpack в появившуюся __в__ структуре проекта
-__папку node_modules__ и создается запись о подключении пакетов __в файле package.json раздел "devDependencies"__
+**если нужна простая сборка с gulp 4.0, то она тут**
+[https://github.com/abyss-soft/gulp4-html](https://github.com/abyss-soft/gulp4-html) 
 
-npm install --save-dev webpack-dev-server  
-npm install --save-dev babel-loader @babel/core @babel/preset-env
-@babel/plugin-proposal-class-properties  
-npm install --save-dev html-loader  
-npm install --save-dev style-loader css-loader postcss-loader postcss
-autoprefixer  
-npm install -D file-loader url-loader  
-npm install --save-dev html-webpack-plugin  
-npm install --save-dev mini-css-extract-plugin  
-npm install --save-dev clean-webpack-plugin  
-npm install --save-dev webpack-merge  
-npm install --save-dev friendly-errors-webpack-plugin  
-npm install -D webpackbar  
-npm install -D optimize-css-assets-webpack-plugin  
-npm install -D handlebars handlebars-loader  
-npm install --save-dev gh-pages
+**если нужна простая сборка с gulp 3.9, то она тут**
+[https://github.com/abyss-soft/gulp-html](https://github.com/abyss-soft/gulp-html) 
 
-8. Указываем скрипты в файле package.json раздел "scripts":
+----
 
-```
- "scripts": {
-    "start": "webpack-dev-server --env.mode development",
-    "build": "webpack --env.mode production",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
-  },
-```
+## Установка
 
-9. Создаем структуру проекта папка src внутри папки src файл index.js
+Клонируем к себе репозиторий
 
-10. Создаем файл конфигураций Webpack в корне проекта webpack.config.js
+Сделайте **git clone**
 
-11. Добавляем в корень проекта такие файлы настроек с кодом:
+Смените директорию **cd webpack-template-base**
 
-## .babelrc https://babeljs.io/docs/en/configuration
+Запустите  **npm install**
 
-```
-{
-  "presets": ["@babel/preset-env"],
-  "plugins": ["@babel/plugin-proposal-class-properties"]
-}
-```
+---
 
-## postcss.config.js https://github.com/postcss/postcss-loader
+## Работа
 
-```
-module.exports = {
-  plugins: [require("autoprefixer")],
-};
-```
+###### для включения Smart-grid 
+даем команду **npm run smart-grid**
 
-## .prettierrc https://prettier.io/docs/en/options.html
+в папке SCSS/UTILS появляется файл **_smart-grid.scss** 
 
-```
-{
-  "printWidth": 80,
-  "tabWidth": 2,
-  "useTabs": false,
-  "semi": true,
-  "stringleQuote": true,
-  "trailingComma": "all",
-  "bracketSpacing": true,
-  "jsxBracketSameLine": false,
-  "proseWrap": "always"
-}
-```
+его нужно подключить туда, где хотите применять сетку
 
-## webpack.config.js (в корне проекта)
+---
 
-```
-const path = require("path");
-const { merge } = require("webpack-merge");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const FriendlyErrorsWebpackPlugin = require("friendly-errors-webpack-plugin");
-const WebpackBar = require("webpackbar");
+##### Для разработки:
 
-const loadModeConfig = (env) =>
-  require(`./build-utils/${env.mode}.config.js`)(env);
+даем команду **npm run dev**
 
-module.exports = (env) =>
-  merge(
-    {
-      mode: env.mode,
-      context: path.resolve(__dirname, "src"),
+Получаем комфортную среду для отладки, есть карты кода (source maps)
 
-      entry: "./index.js",
-      output: {
-        path: path.resolve(__dirname, "dist"),
-        filename: "[name].bundle.js",
-      },
-      module: {
-        rules: [
-          {
-            test: /\.js$/,
-            exclude: /node_modules/,
-            use: ["babel-loader"],
-          },
-          {
-            test: /\.html$/,
-            use: ["html-loader"],
-          },
-          {
-            test: /\.(gif|png|jpe?g|svg)$/,
-            use: [
-              {
-                loader: "url-loader",
-                options: {
-                  name: "[path]/[name].[ext]",
-                  limit: false,
-                },
-              },
-            ],
-          },
-          {
-            test: /\.hbs$/,
-            use: ["handlebars-loader"],
-          },
-        ],
-      },
-      plugins: [
-        new CleanWebpackPlugin(),
-        new FriendlyErrorsWebpackPlugin(),
-        new WebpackBar(),
-      ],
-    },
-    loadModeConfig(env),
-  );
+---
 
-```
+##### Использования глобальных переменных ENV
+переменные экспортируются в файле webpack.dev.conf.js
 
-## development.config.js (в папке build-utils)
+Например:
 
-```
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+    APP_ENV: JSON.stringify(process.env.APP_ENV),
+    API_KEY: JSON.stringify(process.env.API_KEY)
 
-module.exports = (env) => ({
-  devtool: "cheap-eval-source-map",
-  module: {
-    rules: [
-      {
-        test: /\.css$/,
-        use: ["style-loader", "css-loader", "postcss-loader"],
-      },
-    ],
-  },
-  plugins: [new HtmlWebpackPlugin({ template: "./index.html" })],
-  devServer: {
-    contentBase: path.join(__dirname, "dist"),
-    historyApiFallback: true,
-    compress: true,
-    port: 4141,
-    noInfo: true,
-    quiet: true,
-    clientLogLevel: "warning",
-    stats: "errors-only",
-    open: true,
-  },
-});
-```
+Использовать в коде можно например так:
 
-## production.config.js (в папке build-utils)
+    if (APP_ENV === "dev") {..код  для разработки..}
 
-```
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+Или так, используя глобальную переменную process.env:
 
-module.exports = (env) => ({
-  devtool: "source-map",
-  module: {
-    rules: [
-      {
-        test: /\.css$/,
-        use: [
-          MiniCssExtractPlugin.loader, // вытянет из js
-          "css-loader", // добавит все в js
-          "postcss-loader", // добавляет автопрефиксы
-        ],
-      },
-    ],
-  },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: "./index.html",
-      minify: {
-        collapseWhitespace: true,
-        removeComments: true,
-        removeRedundantAttributes: true,
-        removeScriptTypeAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        useShortDoctype: true,
-      },
-    }),
-    new MiniCssExtractPlugin({ filename: "styles.css" }),
-    new OptimizeCssAssetsPlugin(),
-  ],
-});
-```
+    if (process.env.NODE_ENV !== `production`) {..код только для разработки, в продакшен не попадет..}
+
+---
+###### использование плагина удаления блоков кода
+
+удаление блоков кода в HTML:
+
+  <!--deletestart-->
+  <link rel="stylesheet" type="text/css" href="assets/scss/main.scss"/>
+  <!--deleteend-->
+
+все что находится между блоками deletestart ... deleteend будет удалено
+
+---
+
+##### Для продакшена:
+
+если использовали глобальные переменные, то устанавливаем переменную **APP_ENV=prod**
+
+даем команду **npm run prod**
+
+Получаем папку dist содержащую минимизированный / сжатый код
+
+---
+
+##### Для проверки правильности кода:
+
+даем команду  **npm run lint**
+
+---
+
+##### Для проверки тестов:
+
+даем команду  **npm run test**
